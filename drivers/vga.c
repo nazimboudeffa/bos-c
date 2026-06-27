@@ -15,16 +15,10 @@ static inline uint16_t vga_entry(char c, uint8_t color) {
 
 static void vga_update_cursor(void) {
     uint16_t pos = cursor_row * VGA_WIDTH + cursor_col;
-    __asm__ volatile (
-        "outb %0, $0x3D4\n"
-        "outb %1, $0x3D5\n"
-        : : "a"((uint8_t)0x0F), "a"((uint8_t)(pos & 0xFF))
-    );
-    __asm__ volatile (
-        "outb %0, $0x3D4\n"
-        "outb %1, $0x3D5\n"
-        : : "a"((uint8_t)0x0E), "a"((uint8_t)((pos >> 8) & 0xFF))
-    );
+    __asm__ volatile ("outb %0, %1" : : "a"((uint8_t)0x0F), "Nd"((uint16_t)0x3D4));
+    __asm__ volatile ("outb %0, %1" : : "a"((uint8_t)(pos & 0xFF)), "Nd"((uint16_t)0x3D5));
+    __asm__ volatile ("outb %0, %1" : : "a"((uint8_t)0x0E), "Nd"((uint16_t)0x3D4));
+    __asm__ volatile ("outb %0, %1" : : "a"((uint8_t)((pos >> 8) & 0xFF)), "Nd"((uint16_t)0x3D5));
 }
 
 void vga_init(void) {

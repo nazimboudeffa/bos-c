@@ -21,6 +21,7 @@
 #define VGA_COLOR_LIGHT_RED    12
 #define VGA_COLOR_LIGHT_MAGENTA 13
 #define VGA_COLOR_LIGHT_BROWN  14
+#define VGA_COLOR_LIGHT_YELLOW 14
 #define VGA_COLOR_WHITE        15
 
 void vga_init(void);

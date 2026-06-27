@@ -5,14 +5,14 @@ LD     = ld
 
 # Flags
 CFLAGS  = -m32 -ffreestanding -fno-builtin -fno-stack-protector \
-          -nostdlib -nostdinc -Wall -Wextra -O2
+		  -fno-pie -fno-pic -nostdlib -Wall -Wextra -O2
 LDFLAGS = -m elf_i386 -T linker.ld --oformat binary
 
 # Fichiers sources
 KERNEL_SRC = kernel/kernel.c kernel/shell.c \
              drivers/vga.c drivers/keyboard.c
 
-KERNEL_OBJ = $(KERNEL_SRC:.c=.o)
+KERNEL_OBJ = kernel/entry.o $(KERNEL_SRC:.c=.o)
 
 # Cible principale
 all: bos.img
@@ -20,6 +20,10 @@ all: bos.img
 # Bootloader
 boot/boot.bin: boot/boot.asm
 	$(ASM) -f bin $< -o $@
+
+# Entry point assembleur du kernel
+kernel/entry.o: kernel/entry.asm
+	$(ASM) -f elf32 $< -o $@
 
 # Objets C du kernel
 %.o: %.c
@@ -45,6 +49,6 @@ run-gui: bos.img
 
 # Nettoyage
 clean:
-	rm -f boot/boot.bin $(KERNEL_OBJ) kernel.bin bos.img
+	rm -f boot/boot.bin kernel/entry.o $(KERNEL_OBJ) kernel.bin bos.img
 
 .PHONY: all run run-gui clean

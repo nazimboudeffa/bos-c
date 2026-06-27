@@ -1,0 +1,15 @@
+# Artefacts de compilation
+*.o
+*.bin
+*.img
+
+# Binaires kernel
+kernel.bin
+
+# Éditeurs
+.vscode/
+*.swp
+*~
+
+# macOS
+.DS_Store

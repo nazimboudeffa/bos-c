@@ -12,23 +12,54 @@ Une seule commande, aucun outil à installer manuellement (hormis Docker).
 
 **1.** Installe Docker Desktop : [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
 
-**2.** Clone et compile :
+**2.** Clone le dépôt :
 ```bash
 git clone https://github.com/nazimboudeffa/bos-c.git
 cd bos-c
-
-# Compiler (produit bos.img dans le dossier courant)
-docker compose run --rm build
-
-# Nettoyer
-docker compose run --rm clean
 ```
 
-**3.** Lance avec QEMU (installé séparément) :
+**3.** Compile (produit `bos.img` directement dans le dossier courant) :
+```bash
+docker compose run --rm build
+```
+
+**4.** Lance avec QEMU (installé séparément) :
 ```bash
 qemu-system-x86_64 -drive format=raw,file=bos.img
 ```
 > 💡 QEMU for Windows : [https://www.qemu.org/download/#windows](https://www.qemu.org/download/#windows)
+
+**5.** Nettoie les artefacts :
+```bash
+docker compose run --rm clean
+```
+
+---
+
+### Pourquoi `bos.img` reste-t-il dans le conteneur avec `docker build` ?
+
+`docker build` compile tout dans une **image immuable** : `bos.img` y est créé mais reste enfermé à l'intérieur. C'est différent de `docker compose run --rm build` qui monte ton dossier courant en volume (`- .:/bos`) et écrit directement `bos.img` sur ta machine.
+
+| Commande | `bos.img` produit sur l'hôte ? |
+|---|---|
+| `docker compose run --rm build` | ✅ Oui (via le volume monté) |
+| `docker build -t bos-c-build-test .` | ❌ Non (reste dans l'image) |
+
+Si tu utilises `docker build` et veux récupérer `bos.img` sur l'hôte :
+```bash
+# 1. Créer un conteneur temporaire sans le démarrer
+docker create --name bos-extract bos-c-build-test
+
+# 2. Copier bos.img vers le dossier courant
+docker cp bos-extract:/bos/bos.img .
+
+# 3. Supprimer le conteneur temporaire
+docker rm bos-extract
+```
+Puis lancer normalement :
+```bash
+qemu-system-x86_64 -drive format=raw,file=bos.img
+```
 
 ---
 
