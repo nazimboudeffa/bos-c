@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  build:
+    build: .
+    container_name: bos-builder
+    volumes:
+      - .:/bos
+    command: make
+
+  clean:
+    build: .
+    container_name: bos-cleaner
+    volumes:
+      - .:/bos
+    command: make clean

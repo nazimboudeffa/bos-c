@@ -2,33 +2,59 @@
 
 Mini OS en C et assembleur, inspiré de MS-DOS, bootable sur QEMU.
 
+---
+
 ## Prérequis & Installation
+
+### 🐳 Docker (le plus simple — Windows, macOS, Linux)
+
+Une seule commande, aucun outil à installer manuellement (hormis Docker).
+
+**1.** Installe Docker Desktop : [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+
+**2.** Clone et compile :
+```bash
+git clone https://github.com/nazimboudeffa/bos-c.git
+cd bos-c
+
+# Compiler (produit bos.img dans le dossier courant)
+docker compose run --rm build
+
+# Nettoyer
+docker compose run --rm clean
+```
+
+**3.** Lance avec QEMU (installé séparément) :
+```bash
+qemu-system-x86_64 -drive format=raw,file=bos.img
+```
+> 💡 QEMU for Windows : [https://www.qemu.org/download/#windows](https://www.qemu.org/download/#windows)
+
+---
 
 ### Linux / macOS
 
 ```bash
 sudo apt install nasm gcc binutils qemu-system-x86
+make
+make run-gui
 ```
 
-### Windows — MSYS2 (recommandé)
-
-La façon la plus simple sous Windows.
+### Windows — MSYS2
 
 **1.** Installe MSYS2 : [https://www.msys2.org](https://www.msys2.org)
 
-**2.** Ouvre le terminal MSYS2 et installe les outils :
+**2.** Dans le terminal MSYS2 :
 ```bash
 pacman -S nasm mingw-w64-x86_64-gcc mingw-w64-x86_64-binutils make
 ```
 
 **3.** Installe QEMU for Windows : [https://www.qemu.org/download/#windows](https://www.qemu.org/download/#windows)
 
-**4.** Ajoute QEMU au PATH dans MSYS2 :
+**4.** Ajoute QEMU au PATH :
 ```bash
 export PATH=$PATH:"/c/Program Files/qemu"
 ```
-
-C'est tout — `gcc`, `nasm`, `make` et `dd` sont disponibles directement.
 
 ### Windows — WSL2
 
