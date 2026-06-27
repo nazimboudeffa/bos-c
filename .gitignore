@@ -2,6 +2,7 @@
 *.o
 *.bin
 *.img
+*.vdi
 
 # Binaires kernel
 kernel.bin
