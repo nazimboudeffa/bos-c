@@ -12,6 +12,7 @@ const command_t commands[] = {
     { "time",   "Affiche l'heure",                 cmd_time   },
     { "dir",    "Liste les fichiers du disque",    cmd_dir    },
     { "type",   "Affiche le contenu d'un fichier", cmd_type   },
+    { "desk",   "Lance BOS Desktop (TUI)",         cmd_desk   },
     { "reboot", "Redemarrage",                     cmd_reboot },
     { "halt",   "Arret complet",                   cmd_halt   },
 };

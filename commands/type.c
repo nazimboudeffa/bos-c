@@ -3,6 +3,7 @@
 #include "../drivers/vga.h"
 
 void cmd_type(char **argv, int argc) {
+    (void)argv;
     if (argc < 2) {
         kputs("Usage: type <fichier>\n");
         return;
