@@ -1,0 +1,50 @@
+# Outils
+ASM    = nasm
+CC     = gcc
+LD     = ld
+
+# Flags
+CFLAGS  = -m32 -ffreestanding -fno-builtin -fno-stack-protector \
+          -nostdlib -nostdinc -Wall -Wextra -O2
+LDFLAGS = -m elf_i386 -T linker.ld --oformat binary
+
+# Fichiers sources
+KERNEL_SRC = kernel/kernel.c kernel/shell.c \
+             drivers/vga.c drivers/keyboard.c
+
+KERNEL_OBJ = $(KERNEL_SRC:.c=.o)
+
+# Cible principale
+all: bos.img
+
+# Bootloader
+boot/boot.bin: boot/boot.asm
+	$(ASM) -f bin $< -o $@
+
+# Objets C du kernel
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Kernel binaire
+kernel.bin: $(KERNEL_OBJ)
+	$(LD) $(LDFLAGS) -o $@ $(KERNEL_OBJ)
+
+# Image disque finale : boot + kernel (64 secteurs max)
+bos.img: boot/boot.bin kernel.bin
+	dd if=/dev/zero of=$@ bs=512 count=2880
+	dd if=boot/boot.bin of=$@ conv=notrunc bs=512 count=1
+	dd if=kernel.bin of=$@ conv=notrunc bs=512 seek=1
+
+# Lancer avec QEMU
+run: bos.img
+	qemu-system-x86_64 -drive format=raw,file=bos.img -nographic \
+	    -serial mon:stdio
+
+run-gui: bos.img
+	qemu-system-x86_64 -drive format=raw,file=bos.img
+
+# Nettoyage
+clean:
+	rm -f boot/boot.bin $(KERNEL_OBJ) kernel.bin bos.img
+
+.PHONY: all run run-gui clean
