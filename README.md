@@ -34,6 +34,11 @@ qemu-system-x86_64 -drive format=raw,file=bos.img
 docker compose run --rm clean
 ```
 
+**6.** VirtualBox : La commande pour transformer le `.img` en `.vdi`
+```bash
+& 'C:\Program Files\Oracle\VirtualBox\VBoxManage.exe' convertfromraw bos.img bos.vdi --format VDI
+```
+
 ---
 
 ### Pourquoi `bos.img` reste-t-il dans le conteneur avec `docker build` ?
