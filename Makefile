@@ -9,10 +9,11 @@ CFLAGS  = -m32 -ffreestanding -fno-builtin -fno-stack-protector \
 LDFLAGS = -m elf_i386 -T linker.ld --oformat binary
 
 # Fichiers sources
-KERNEL_SRC = kernel/kernel.c kernel/shell.c \
-             drivers/vga.c drivers/keyboard.c
+KERNEL_SRC  = kernel/kernel.c kernel/shell.c \
+              drivers/vga.c drivers/keyboard.c
+COMMANDS_SRC = $(wildcard commands/*.c)
 
-KERNEL_OBJ = kernel/entry.o $(KERNEL_SRC:.c=.o)
+KERNEL_OBJ  = kernel/entry.o $(KERNEL_SRC:.c=.o) $(COMMANDS_SRC:.c=.o)
 
 # Cible principale
 all: bos.img
@@ -47,8 +48,12 @@ run: bos.img
 run-gui: bos.img
 	qemu-system-x86_64 -drive format=raw,file=bos.img
 
-# Nettoyage
+# Build + nettoyage des intermédiaires (garde uniquement bos.img)
+dist: bos.img
+	rm -f boot/boot.bin kernel/entry.o $(KERNEL_OBJ) kernel.bin
+
+# Nettoyage complet
 clean:
 	rm -f boot/boot.bin kernel/entry.o $(KERNEL_OBJ) kernel.bin bos.img
 
-.PHONY: all run run-gui clean
+.PHONY: all run run-gui dist clean

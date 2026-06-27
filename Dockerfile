@@ -20,8 +20,8 @@ WORKDIR /bos
 # Copie les sources
 COPY . .
 
-# Compile au build
-RUN make
+# Compile et nettoie les fichiers intermédiaires (garde uniquement bos.img)
+RUN make dist
 
 # Par défaut : affiche l'image produite
 CMD ["ls", "-lh", "bos.img"]

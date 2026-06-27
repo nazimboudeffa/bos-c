@@ -6,7 +6,7 @@ services:
     container_name: bos-builder
     volumes:
       - .:/bos
-    command: make
+    command: make dist
 
   clean:
     build: .
