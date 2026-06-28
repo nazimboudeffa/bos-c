@@ -1,5 +1,5 @@
 #include "kernel.h"
-#include "shell.h"
+#include "../shell/shell.h"
 #include "../drivers/vga.h"
 #include "../drivers/keyboard.h"
 

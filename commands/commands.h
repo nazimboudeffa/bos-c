@@ -21,7 +21,7 @@ void cmd_date   (char **argv, int argc);
 void cmd_time   (char **argv, int argc);
 void cmd_dir    (char **argv, int argc);
 void cmd_type   (char **argv, int argc);
-void cmd_gui   (char **argv, int argc);
+void cmd_gui    (char **argv, int argc);
 void cmd_reboot (char **argv, int argc);
 void cmd_halt   (char **argv, int argc);
 

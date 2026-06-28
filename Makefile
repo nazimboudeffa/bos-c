@@ -9,7 +9,7 @@ CFLAGS  = -m32 -ffreestanding -fno-builtin -fno-stack-protector \
 LDFLAGS = -m elf_i386 -T linker.ld --oformat binary
 
 # Fichiers sources
-KERNEL_SRC  = kernel/kernel.c kernel/shell.c \
+KERNEL_SRC  = kernel/kernel.c shell/shell.c \
               drivers/vga.c drivers/keyboard.c
 COMMANDS_SRC = $(wildcard commands/*.c)
 
